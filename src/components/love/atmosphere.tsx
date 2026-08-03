@@ -4,6 +4,13 @@ function rand(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
 
+/** Particles are random, so they must only render after hydration. */
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
 /* ---------------- Twinkling stars ---------------- */
 export function StarField({ count = 90, bright = false }: { count?: number; bright?: boolean }) {
   const stars = useMemo(
@@ -17,6 +24,9 @@ export function StarField({ count = 90, bright = false }: { count?: number; brig
       })),
     [count],
   );
+
+  const mounted = useMounted();
+  if (!mounted) return null;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -55,6 +65,9 @@ export function FloatingHearts({ count = 18 }: { count?: number }) {
     [count],
   );
 
+  const mounted = useMounted();
+  if (!mounted) return null;
+
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       {hearts.map((h, i) => (
@@ -90,6 +103,9 @@ export function RosePetals({ count = 22 }: { count?: number }) {
       })),
     [count],
   );
+
+  const mounted = useMounted();
+  if (!mounted) return null;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -131,6 +147,9 @@ export function Confetti({ pieces = 120 }: { pieces?: number }) {
     [pieces],
   );
 
+  const mounted = useMounted();
+  if (!mounted) return null;
+
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-30 overflow-hidden">
       {bits.map((b, i) => (
@@ -165,6 +184,9 @@ export function Sparkles({ count = 40 }: { count?: number }) {
       })),
     [count],
   );
+  const mounted = useMounted();
+  if (!mounted) return null;
+
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
       {sparks.map((s, i) => (
