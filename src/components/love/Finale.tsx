@@ -67,7 +67,7 @@ export function Finale() {
             >
               ❤️
             </div>
-            <p className="absolute inset-x-4 text-sm font-semibold tracking-widest text-primary-foreground sm:text-xl">
+            <p className="absolute left-1/2 top-[46%] w-[62%] -translate-x-1/2 -translate-y-1/2 text-[0.7rem] leading-snug font-semibold tracking-[0.18em] text-primary-foreground sm:text-lg">
               {typed}
               <span className="ml-0.5" style={{ animation: "caret 1s step-end infinite" }}>
                 |
