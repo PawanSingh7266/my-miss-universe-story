@@ -7,7 +7,7 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  base: "/my-miss-universe-story/",
+  
   tanstackStart: {
     server: {
       entry: "server",
