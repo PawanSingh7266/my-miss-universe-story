@@ -88,8 +88,9 @@ export function Slideshow() {
               alt=""
               loading="lazy"
               decoding="async"
+              onError={() => markFailed(s.src)}
               className={`absolute inset-0 h-full w-full scale-125 object-cover blur-2xl transition-opacity duration-1000 ${
-                i === index ? "opacity-45" : "opacity-0"
+                i === index && !failed[s.src] ? "opacity-45" : "opacity-0"
               }`}
             />
           ))}
@@ -97,30 +98,45 @@ export function Slideshow() {
 
           {/* full, uncropped photo */}
           <div className="relative flex h-[52vh] w-full items-center justify-center p-4 sm:h-[62vh] sm:p-8">
-            {SLIDES.map((s, i) => (
-              <img
-                key={s.src}
-                src={s.src}
-                alt={s.alt}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                className={`max-h-full max-w-full rounded-2xl object-contain shadow-2xl transition-all duration-1000 ease-out ${
-                  i === index
-                    ? "relative scale-100 opacity-100 blur-0"
-                    : "pointer-events-none absolute inset-4 m-auto scale-105 opacity-0"
-                } ${i === index && s.effect === "zoom" ? "animate-slow-zoom" : ""}`}
-                style={
-                  i === index
-                    ? {
-                        boxShadow:
-                          s.effect === "glow"
-                            ? "0 0 70px oklch(0.72 0.19 350 / 45%)"
-                            : "0 25px 60px oklch(0.12 0.05 300 / 55%), 0 0 40px oklch(0.72 0.19 350 / 25%)",
-                      }
-                    : undefined
-                }
-              />
-            ))}
+            {SLIDES.map((s, i) =>
+              failed[s.src] ? (
+                <div
+                  key={s.src}
+                  className={`glass flex max-h-full w-full max-w-sm flex-col items-center justify-center gap-3 rounded-2xl px-6 py-14 text-center transition-all duration-1000 ${
+                    i === index
+                      ? "relative scale-100 opacity-100"
+                      : "pointer-events-none absolute inset-4 m-auto scale-105 opacity-0"
+                  }`}
+                >
+                  <span className="animate-heartbeat text-4xl">💖</span>
+                  <p className="font-display text-sm text-foreground/80 sm:text-base">{s.alt}</p>
+                </div>
+              ) : (
+                <img
+                  key={s.src}
+                  src={s.src}
+                  alt={s.alt}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  onError={() => markFailed(s.src)}
+                  className={`max-h-full max-w-full rounded-2xl object-contain shadow-2xl transition-all duration-1000 ease-out ${
+                    i === index
+                      ? "relative scale-100 opacity-100 blur-0"
+                      : "pointer-events-none absolute inset-4 m-auto scale-105 opacity-0"
+                  } ${i === index && s.effect === "zoom" ? "animate-slow-zoom" : ""}`}
+                  style={
+                    i === index
+                      ? {
+                          boxShadow:
+                            s.effect === "glow"
+                              ? "0 0 70px oklch(0.72 0.19 350 / 45%)"
+                              : "0 25px 60px oklch(0.12 0.05 300 / 55%), 0 0 40px oklch(0.72 0.19 350 / 25%)",
+                        }
+                      : undefined
+                  }
+                />
+              ),
+            )}
 
             {slide.effect === "hearts" && (
               <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
