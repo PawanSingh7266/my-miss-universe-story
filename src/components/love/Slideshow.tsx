@@ -60,7 +60,7 @@ export function Slideshow() {
         <span className="text-gradient-rose animate-shimmer">Our Photo Memories</span>
       </h2>
 
-      <div className="glass relative mt-10 overflow-hidden rounded-4xl p-4 sm:p-6">
+      <div className="glass relative mt-10 rounded-4xl p-4 sm:p-6">
         {featured && (
           <div className="animate-crown pointer-events-none absolute left-1/2 top-1 z-20 -translate-x-1/2 text-4xl sm:text-5xl">
             👑
@@ -68,66 +68,93 @@ export function Slideshow() {
         )}
 
         <div
-          className={`relative overflow-hidden rounded-3xl ${
-            featured ? "animate-gold-pulse border-2 border-gold" : "border border-border"
+          className={`group relative overflow-hidden rounded-3xl transition-shadow duration-700 ${
+            featured
+              ? "animate-gold-pulse border-2 border-gold hover:glow-gold"
+              : "border border-border hover:glow-rose"
           }`}
         >
+          {/* blurred backdrop of the same photo */}
           {SLIDES.map((s, i) => (
             <img
-              key={s.src}
+              key={`bg-${s.src}`}
+              aria-hidden
               src={s.src}
-              alt={s.alt}
-              loading={i === 0 ? "eager" : "lazy"}
+              alt=""
+              loading="lazy"
               decoding="async"
-              className={`h-[54vh] w-full object-cover transition-all duration-1000 ease-out sm:h-[62vh] ${
-                i === index
-                  ? "relative scale-100 opacity-100 blur-0"
-                  : "pointer-events-none absolute inset-0 scale-110 opacity-0 blur-sm"
-              } ${i === index && s.effect === "zoom" ? "animate-slow-zoom" : ""}`}
-              style={
-                i === index && s.effect === "glow"
-                  ? { boxShadow: "inset 0 0 90px oklch(0.72 0.19 350 / 45%)" }
-                  : undefined
-              }
+              className={`absolute inset-0 h-full w-full scale-125 object-cover blur-2xl transition-opacity duration-1000 ${
+                i === index ? "opacity-45" : "opacity-0"
+              }`}
             />
           ))}
+          <div className="pointer-events-none absolute inset-0 bg-background/40" />
 
-          {slide.effect === "hearts" && (
-            <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <span
-                  key={i}
-                  className="absolute bottom-0 text-2xl"
-                  style={{
-                    left: `${8 + i * 9}%`,
-                    ["--drift" as string]: `${(i % 2 ? 1 : -1) * 40}px`,
-                    animation: `float-up ${8 + i}s linear ${i * 0.6}s infinite`,
-                  }}
-                >
-                  💖
-                </span>
-              ))}
-            </div>
-          )}
+          {/* full, uncropped photo */}
+          <div className="relative flex h-[52vh] w-full items-center justify-center p-4 sm:h-[62vh] sm:p-8">
+            {SLIDES.map((s, i) => (
+              <img
+                key={s.src}
+                src={s.src}
+                alt={s.alt}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className={`max-h-full max-w-full rounded-2xl object-contain shadow-2xl transition-all duration-1000 ease-out ${
+                  i === index
+                    ? "relative scale-100 opacity-100 blur-0"
+                    : "pointer-events-none absolute inset-4 m-auto scale-105 opacity-0"
+                } ${i === index && s.effect === "zoom" ? "animate-slow-zoom" : ""}`}
+                style={
+                  i === index
+                    ? {
+                        boxShadow:
+                          s.effect === "glow"
+                            ? "0 0 70px oklch(0.72 0.19 350 / 45%)"
+                            : "0 25px 60px oklch(0.12 0.05 300 / 55%), 0 0 40px oklch(0.72 0.19 350 / 25%)",
+                      }
+                    : undefined
+                }
+              />
+            ))}
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 to-transparent p-5 pt-16 sm:p-8">
-            {featured ? (
-              <div className="text-center">
-                <h3 className="text-2xl font-semibold text-gold sm:text-4xl">{slide.caption}</h3>
-                <p className="font-display mx-auto mt-3 max-w-lg text-sm leading-relaxed text-foreground/90 sm:text-lg">
-                  “If someone asks me what perfection looks like, I won’t explain… I’ll simply show
-                  them your smile.”
-                </p>
+            {slide.effect === "hearts" && (
+              <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="absolute bottom-0 text-2xl"
+                    style={{
+                      left: `${8 + i * 9}%`,
+                      ["--drift" as string]: `${(i % 2 ? 1 : -1) * 40}px`,
+                      animation: `float-up ${8 + i}s linear ${i * 0.6}s infinite`,
+                    }}
+                  >
+                    💖
+                  </span>
+                ))}
               </div>
-            ) : (
-              <p className="font-display text-center text-base leading-relaxed sm:text-2xl">
-                {slide.caption}
-              </p>
             )}
           </div>
         </div>
 
-        <div className="mt-5 flex items-center justify-between gap-4">
+        {/* quote card below the photo */}
+        <div key={index} className="glass animate-rise-in mt-5 rounded-3xl px-6 py-6 sm:px-10 sm:py-8">
+          {featured ? (
+            <div className="text-center">
+              <h3 className="text-2xl font-semibold text-gold sm:text-4xl">{slide.caption}</h3>
+              <p className="font-display mx-auto mt-3 max-w-lg text-sm leading-relaxed text-foreground/90 sm:text-lg">
+                “If someone asks me what perfection looks like, I won’t explain… I’ll simply show
+                them your smile.”
+              </p>
+            </div>
+          ) : (
+            <p className="font-display text-center text-base leading-relaxed sm:text-2xl">
+              {slide.caption}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-6 flex items-center justify-between gap-4">
           <button
             onClick={() => go(-1)}
             aria-label="Previous photo"
