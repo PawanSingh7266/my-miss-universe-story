@@ -41,6 +41,11 @@ const SLIDES: Slide[] = [
 
 export function Slideshow() {
   const [index, setIndex] = useState(0);
+  const [failed, setFailed] = useState<Record<string, boolean>>({});
+  const markFailed = useCallback((src: string) => {
+    setFailed((f) => (f[src] ? f : { ...f, [src]: true }));
+    if (import.meta.env.DEV) console.warn(`[Slideshow] image failed to load: ${src}`);
+  }, []);
 
   const go = useCallback((dir: number) => {
     setIndex((i) => (i + dir + SLIDES.length) % SLIDES.length);
