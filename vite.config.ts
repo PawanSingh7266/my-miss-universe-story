@@ -7,7 +7,15 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  
+  vite: {
+    build: {
+      // Inline the gallery photos into the bundle so they are always served with
+      // the app itself (works on Lovable, Vercel, GitHub Pages — no static-asset
+      // hosting assumptions, no 404s on hashed asset URLs).
+      assetsInlineLimit: (filePath: string) =>
+        /src[\\/]assets[\\/]photo\d+\.jpg$/.test(filePath) ? true : undefined,
+    },
+  },
   tanstackStart: {
     server: {
       entry: "server",
