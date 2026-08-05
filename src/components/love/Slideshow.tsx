@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
-import photo1 from "@/assets/photo1.jpg.asset.json";
-import photo2 from "@/assets/photo2.jpg.asset.json";
-import photo3 from "@/assets/photo3.jpg.asset.json";
-import photo4 from "@/assets/photo4.jpg.asset.json";
+import photo1 from "@/assets/photo1.jpg";
+import photo2 from "@/assets/photo2.jpg";
+import photo3 from "@/assets/photo3.jpg";
+import photo4 from "@/assets/photo4.jpg";
 
 type Slide = {
   src: string;
@@ -14,25 +14,25 @@ type Slide = {
 
 const SLIDES: Slide[] = [
   {
-    src: photo1.url,
+    src: photo1,
     alt: "My love standing against a warm wooden wall",
     caption: "❤️ “The day I met you, my life changed forever.”",
     effect: "zoom",
   },
   {
-    src: photo2.url,
+    src: photo2,
     alt: "My love smiling softly at a café table",
     caption: "🌹 “Your smile is the most beautiful thing I’ve ever seen.”",
     effect: "hearts",
   },
   {
-    src: photo3.url,
+    src: photo3,
     alt: "Polaroid memories of us together",
     caption: "✨ “Every moment with you becomes my favorite memory.”",
     effect: "glow",
   },
   {
-    src: photo4.url,
+    src: photo4,
     alt: "My Miss Universe in a green saree",
     caption: "👑 My Miss Universe 👑",
     effect: "featured",
